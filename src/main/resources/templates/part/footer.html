@@ -1,0 +1,7 @@
+<div th:fragment="footer">
+    <footer class="fixed-bottom">
+        <div class="container mt-2 text-end">
+            <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}"></span> г.
+        </div>
+    </footer>
+</div>

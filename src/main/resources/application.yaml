@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/store
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  mail:
+    host: smtp.yandex.ru
+    username: bot.api.afalin@yandex.ru
+    password: stpkioqwaypgvfee
+    port: 465
+    protocol: smtps
+
+upload:
+  path: /C:/Documents/JavaProjects/afalin/store-api/upload
+
+mail:
+  debug: true
+

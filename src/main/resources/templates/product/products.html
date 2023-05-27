@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:insert="~{part/header :: head}"/>
+
+    <title>Programmer Store</title>
+
+</head>
+<body>
+
+<th:block th:insert="~{part/navigation :: nav}"/>
+
+<div class="container mt-5">
+    <h4>Список всех товаров</h4>
+
+    <table class="table">
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Количество</th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.name}">Name</td>
+            <td th:text="${product.description}">Description</td>
+            <td th:text="${product.price}">Price</td>
+
+            <td class="d-flex">
+                <span th:text="${product.count}">Count</span>
+                <!-- Добавить продукт в корзину -->
+                <form sec:authorize="!hasAnyRole('ROLE_ADMIN')" class="mx-3 col-2"
+                      th:action="@{/clients/{clientId}/add-product-in-cart/{productId}(clientId=${clientId},productId=${product.id})}"
+                      th:method="post">
+                    <label><input type="text" th:name="count"></label>
+                    <button class="btn btn-sm btn-outline-success">Добавить</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<th:block th:insert="~{part/footer :: footer}"/>
+</body>
+</html>

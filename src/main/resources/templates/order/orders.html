@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:insert="~{part/header :: head}"/>
+
+    <title>Programmer Store</title>
+
+</head>
+<body>
+
+<th:block th:insert="~{part/navigation :: nav}"/>
+
+<div class="container mt-2">
+    <h4>Список заказов</h4>
+
+    <table class="table">
+        <tr class="table-info text-center">
+            <th>Номер</th>
+            <th>Статус</th>
+            <th>Id клиента</th>
+            <th>Имя</th>
+            <th>Сумма заказа</th>
+            <th>Действия</th>
+        </tr>
+        <tr th:each="order: ${orders}">
+            <td th:text="${order.id}">number</td>
+            <td th:text="${order.status}">status</td>
+            <td th:text="${order.client.id}">id</td>
+            <td>
+                <span th:text="${order.client.firstname}">firstname</span>
+                &nbsp;
+                <span th:text="${order.client.lastname}">lastname</span>
+            </td>
+
+            <td th:text="${order.amount}">sum order</td>
+            <td>
+                <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" class="m-2 d-inline"
+                      th:action="@{/orders/{orderId}/show(orderId=${order.id})}"
+                      th:method="get">
+                    <button class="btn btn-info">Посмотреть</button>
+                </form>
+
+                <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'new')}">
+                    <div class="me-auto col-auto">
+                        <form class="m-2 d-inline"
+                              th:action="@{/orders/{orderId}/{newStatus}(orderId=${order.id}, newStatus='accepted')}"
+                              th:method="get">
+                            <button class="btn btn-success">Принять</button>
+                        </form>
+                        <form class="m-2 d-inline"
+                              th:action="@{/orders/{orderId}/{newStatus}(orderId=${order.id}, newStatus='rejected')}"
+                              th:method="get">
+
+                            <button class="btn btn-danger">Отклонить</button>
+                        </form>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'accepted')}">
+                    <div class="me-auto col-auto">
+                        <form class="m-2 d-inline"
+                              th:action="@{/orders/{orderId}/{newStatus}(orderId=${order.id}, newStatus='finished')}"
+                              th:method="get">
+                            <button class="btn btn-secondary">Завершить</button>
+                        </form>
+                    </div>
+                </th:block>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<th:block th:insert="~{part/footer :: footer}"/>
+</body>
+</html>

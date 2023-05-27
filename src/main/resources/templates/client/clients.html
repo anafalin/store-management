@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:insert="~{part/header :: head}"/>
+
+    <title>Programmer Store</title>
+
+</head>
+<body>
+
+<th:block th:insert="~{part/navigation :: nav}"/>
+
+<div class="container mt-3">
+    <h4>Список всех пользователей</h4>
+
+    <table class="table">
+        <tr>
+            <th>Логин</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>email</th>
+            <th>Операции</th>
+        </tr>
+        <tr th:each="client : ${clients}">
+            <td th:text="${client.user.login}">Login</td>
+            <td th:text="${client.firstname}">FirstName</td>
+            <td th:text="${client.lastname}">LastName</td>
+            <td th:text="${client.user.email}">email</td>
+            <td>
+                <!-- Показать корзину -->
+                <form th:action="@{/{clientId}/cart(clientId=${client.id})}"
+                      th:method="get"
+                      class="mx-3">
+                    <button class="btn btn-sm btn-outline-secondary">Корзина</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<th:block th:insert="~{part/footer :: footer}"/>
+</body>
+</html>

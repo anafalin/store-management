@@ -1,0 +1,63 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="nav">
+    <nav class="navbar navbar-expand-lg bg-info-subtle text-emphasis-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+                    aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Переключатель навигации">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="/">
+                <img src="/img/icon.png" alt="Logo" class="d-inline-block align-text-top">
+                Programmer
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/home">Главная</a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#"
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Заказы
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/orders/all">Все заказы</a></li>
+                            <li><a class="dropdown-item" href="/orders?status=new">Новые заказы</a></li>
+                            <li><a class="dropdown-item" href="/orders?status=accepted">Принятые заказы</a></li>
+                            <li><a class="dropdown-item" href="/orders?status=rejected">Отклоненные заказы</a></li>
+                            <li><a class="dropdown-item" href="/orders?status=finished">Завершенные заказы</a></li>
+                        </ul>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                        <a class="nav-link" href="/clients/all">Пользователи</a>
+                    </li>
+
+                </ul>
+            </div>
+
+
+            <a sec:authorize="isAuthenticated()" sec:authentication="name" class="profile mx-4" href="#"></a>
+            <a sec:authorize="!isAuthenticated()" class="profile mx-4" href="#">Гость</a>
+
+            <div sec:authorize="isAuthenticated() && !hasRole('ROLE_ADMIN')">
+                <a th:href="@{/clients/{clientId}/orders/all(clientId=${clientId})}" th:method="get" class="mx-3">
+                    <img src="/img/orders.png" alt="...">
+                    Заказы
+                </a>
+
+                <a th:href="@{/clients/{clientId}/cart(clientId=${clientId})}" th:method="get" class="mx-3">
+                    <img src="/img/basket.png" alt="...">
+                    Корзина
+                </a>
+            </div>
+            <a sec:authorize="!isAuthenticated()" class="btn btn-dark-blue mx-2" href="/login">Вход</a>
+            <a sec:authorize="!isAuthenticated()" class="btn btn-outline-dark-blue mx-2" href="/reg">Регистрация</a>
+            <a sec:authorize="isAuthenticated()" class="btn btn-dark mx-2" href="/logout">Выход</a>
+        </div>
+    </nav>
+</div>
+
+
+

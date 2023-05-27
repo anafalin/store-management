@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <th:block th:insert="~{part/header :: head}"/>
+
+    <title>Programmer Store</title>
+
+</head>
+<body>
+
+<th:block th:insert="~{part/navigation :: nav}"/>
+
+<div class="container mt-3">
+    <h4>Список всех заказов</h4>
+
+    <table class="table">
+        <tr>
+            <th>Наименование</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Сумма</th>
+        </tr>
+        <tr th:each="orderRow : ${orderRows}">
+            <td th:text="${orderRow.product.name}">Name</td>
+            <td th:text="${orderRow.product.price}">Price</td>
+            <td th:text="${orderRow.count}">Count</td>
+            <td th:text="${orderRow.amount}">Amount</td>
+        </tr>
+    </table>
+
+    <div>Общая сумма заказа: <span th:text="${order.amount}">amount cart</span></div>
+
+</div>
+
+<th:block th:insert="~{part/footer :: footer}"/>
+</body>
+</html>

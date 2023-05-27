@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:insert="~{part/header :: head}"/>
+
+    <title>Programmer Store</title>
+
+</head>
+<body>
+
+<th:block th:insert="~{part/navigation :: nav}"/>
+
+<div sec:authorize="!isAuthenticated()" class="container mt-5 main">
+    <h4 class="col-8">Добро пожаловать в интернет-магазин компьютерной техники!</h4>
+</div>
+
+<div sec:authorize="isAuthenticated()" class="container mt-5">
+    <div class="container m-2">
+        <div  sec:authorize="hasRole('ROLE_ADMIN')" class="orders my-3">
+            <h5>Информация по заказам:</h5>
+            <div class="box">
+                <img src="/img/all.png" class="img-thumbnail" alt="...">
+                <a href="/orders/all">Все заказы</a>
+            </div>
+            <div class="box">
+                <img src="/img/new.png" class="img-thumbnail" alt="...">
+                <a th:href="${'/orders?status='+#uris.escapeQueryParam('new')}">Новые заказы</a>
+            </div>
+            <div class="box">
+                <img src="/img/accepted.png" class="img-thumbnail" alt="...">
+                <a th:href="${'/orders?status='+#uris.escapeQueryParam('accepted')}">Принятые заказы</a>
+            </div>
+            <div class="box">
+                <img src="/img/rejected.png" class="img-thumbnail" alt="...">
+                <a th:href="${'/orders?status='+#uris.escapeQueryParam('rejected')}">Отклоненные заказы</a>
+            </div>
+            <div class="box">
+                <img src="/img/finished.png" class="img-thumbnail" alt="...">
+                <a th:href="${'/orders?status='+#uris.escapeQueryParam('finished')}">Завершенные заказы</a>
+            </div>
+        </div>
+
+        <div sec:authorize="hasRole('ROLE_ADMIN')" class="users my-3">
+            <h5>Пользователи:</h5>
+            <div class="box">
+                <img src="/img/users.png" class="img-thumbnail" alt="...">
+                <a href="/clients/all">Список всех пользователей</a>
+            </div>
+        </div>
+
+        <div class="products my-3">
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <h5>Работа с товарами:</h5>
+                <div class="box">
+                    <img src="/img/new_product.png" class="img-thumbnail" alt="...">
+                    <a href="/products/new">Добавление нового товара</a>
+                </div>
+            </div>
+            <div>
+                <div class="box">
+                    <img src="/img/product.png" class="img-thumbnail" alt="...">
+                    <a href="/products/all">Список всех товаров</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:insert="~{part/footer :: footer}"/>
+</body>
+</html>
