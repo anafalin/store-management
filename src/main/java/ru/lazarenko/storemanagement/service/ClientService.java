@@ -47,6 +47,7 @@ public class ClientService {
                 .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(id)));
     }
 
+    @Transactional(readOnly = true)
     public Client getClientFullInfoById(Integer id) {
         return clientRepository.findWithUserById(id)
                 .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(id)));

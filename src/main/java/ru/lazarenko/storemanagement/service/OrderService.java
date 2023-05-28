@@ -79,7 +79,13 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<Order> getOrdersByClientId(Integer clientId) {
         return orderRepository.findOrdersByClientId(clientId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> getAllOrdersByClientId(Integer id) {
+        return orderRepository.getAllOrdersByClientId(id);
     }
 }

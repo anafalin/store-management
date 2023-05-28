@@ -23,15 +23,15 @@
                             Заказы
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/orders/all">Все заказы</a></li>
-                            <li><a class="dropdown-item" href="/orders?status=new">Новые заказы</a></li>
-                            <li><a class="dropdown-item" href="/orders?status=accepted">Принятые заказы</a></li>
-                            <li><a class="dropdown-item" href="/orders?status=rejected">Отклоненные заказы</a></li>
-                            <li><a class="dropdown-item" href="/orders?status=finished">Завершенные заказы</a></li>
+                            <li><a class="dropdown-item" href="/admin/orders">Все заказы</a></li>
+                            <li><a class="dropdown-item" href="/admin/orders?status=new">Новые заказы</a></li>
+                            <li><a class="dropdown-item" href="/admin/orders?status=accepted">Принятые заказы</a></li>
+                            <li><a class="dropdown-item" href="/admin/orders?status=rejected">Отклоненные заказы</a></li>
+                            <li><a class="dropdown-item" href="/admin/orders?status=finished">Завершенные заказы</a></li>
                         </ul>
                     </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                        <a class="nav-link" href="/clients/all">Пользователи</a>
+                        <a class="nav-link" href="/admin/clients">Пользователи</a>
                     </li>
 
                 </ul>
@@ -42,12 +42,12 @@
             <a sec:authorize="!isAuthenticated()" class="profile mx-4" href="#">Гость</a>
 
             <div sec:authorize="isAuthenticated() && !hasRole('ROLE_ADMIN')">
-                <a th:href="@{/clients/{clientId}/orders/all(clientId=${clientId})}" th:method="get" class="mx-3">
+                <a th:href="@{/clients/{id}/orders(id=${clientId})}" th:method="get" class="mx-3">
                     <img src="/img/orders.png" alt="...">
                     Заказы
                 </a>
 
-                <a th:href="@{/clients/{clientId}/cart(clientId=${clientId})}" th:method="get" class="mx-3">
+                <a th:href="@{/clients/{id}/cart(id=${clientId})}" th:method="get" class="mx-3">
                     <img src="/img/basket.png" alt="...">
                     Корзина
                 </a>

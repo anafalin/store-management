@@ -19,10 +19,10 @@ public class OrdersController {
     private final AppUserService appUserService;
     private final OrderService orderService;
 
-    @GetMapping("/orders/{orderId}/show")
-    public String getPageOrder(@PathVariable Integer orderId, Model model) {
-        System.out.println(orderId);
-        Order order = orderService.getOrderWithRowsById(orderId);
+    @GetMapping("/orders/{id}/show")
+    public String getPageOrder(@PathVariable Integer id, Model model) {
+        System.out.println(id);
+        Order order = orderService.getOrderWithRowsById(id);
         model.addAttribute("order", order);
         model.addAttribute("orderRows", order.getOrderRows());
         return "/order/order";

@@ -43,7 +43,7 @@ public class ClientController {
         return "redirect:/clients/{clientId}/cart";
     }
 
-    @GetMapping("/clients/{clientId}/order/create-order")
+    @GetMapping("/clients/{clientId}/order/create")
     public String createOrder(@PathVariable Integer clientId) {
         orderService.createOrderByClientId(clientId);
         return "redirect:/home";
@@ -62,7 +62,7 @@ public class ClientController {
         return "redirect:/clients/{clientId}/cart";
     }
 
-    @GetMapping("/clients/{clientId}/orders/all")
+    @GetMapping("/clients/{clientId}/orders")
     public String getClientOrder(@PathVariable Integer clientId, Model model) {
         List<Order> orders = orderService.getOrdersByClientId(clientId);
         model.addAttribute("orders", orders);

@@ -5,8 +5,7 @@
 <head>
     <th:block th:insert="~{part/header :: head}"/>
 
-    <title>Programmer Store</title>
-
+    <title>Клиенты</title>
 </head>
 <body>
 
@@ -16,7 +15,7 @@
     <h4>Список всех пользователей</h4>
 
     <table class="table">
-        <tr>
+        <tr class="table-info text-center">
             <th>Логин</th>
             <th>Имя</th>
             <th>Фамилия</th>
@@ -30,10 +29,16 @@
             <td th:text="${client.user.email}">email</td>
             <td>
                 <!-- Показать корзину -->
-                <form th:action="@{/{clientId}/cart(clientId=${client.id})}"
+                <form th:action="@{/clients/{id}/cart(id=${client.id})}"
                       th:method="get"
                       class="mx-3">
                     <button class="btn btn-sm btn-outline-secondary">Корзина</button>
+                </form>
+                <!-- Показать все заказы пользователя -->
+                <form th:action="@{/admin/clients/{id}/orders(id=${client.id})}"
+                      th:method="get"
+                      class="mx-3">
+                    <button class="btn btn-sm btn-outline-secondary">Все заказы</button>
                 </form>
             </td>
         </tr>

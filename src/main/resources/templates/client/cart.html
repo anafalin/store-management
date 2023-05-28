@@ -5,8 +5,7 @@
 <head>
     <th:block th:insert="~{part/header :: head}"/>
 
-    <title>Programmer Store</title>
-
+    <title>Корзина</title>
 </head>
 <body>
 
@@ -34,7 +33,7 @@
 
     <div sec:authorize="!hasRole('ROLE_ADMIN')" class="mt-3">
         <form class="mx-auto"
-              th:action="@{/clients/{clientId}/order/create-order(clientId=${clientId})}"
+              th:action="@{/clients/{id}/order/create(id=${clientId})}"
               th:method="get">
             <button th:class="${cart.amount} == 0 ? 'btn btn-sm btn-secondary disabled' : 'btn btn-sm btn-secondary'">
                 Оформить

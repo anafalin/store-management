@@ -19,4 +19,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query(value = "select o from Order o left join fetch o.client where o.client.id=:clientId")
     List<Order> findOrdersByClientId(Integer clientId);
+
+    @Query(value = "select o from Order o left join fetch o.client where o.client.id=:clientId")
+    List<Order> getAllOrdersByClientId(Integer clientId);
 }

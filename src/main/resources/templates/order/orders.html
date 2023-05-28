@@ -5,15 +5,21 @@
 <head>
     <th:block th:insert="~{part/header :: head}"/>
 
-    <title>Programmer Store</title>
-
+    <title>Заказы</title>
 </head>
 <body>
 
 <th:block th:insert="~{part/navigation :: nav}"/>
 
-<div class="container mt-2">
-    <h4>Список заказов</h4>
+<div class="container m-2">
+
+    <h4 th:if="${status} == null">Список заказов
+        <span th:if="${clientId != null}" th:text="${#strings.append('клиента с id = ', clientId)}"></span>
+    </h4>
+    <h4 th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'new')}">Список новых заказов</h4>
+    <h4 th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'accepted')}">Список принятых заказов</h4>
+    <h4 th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'rejected')}">Список отклоненных заказов</h4>
+    <h4 th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'finished')}">Список завершенных заказов</h4>
 
     <table class="table">
         <tr class="table-info text-center">
@@ -24,6 +30,7 @@
             <th>Сумма заказа</th>
             <th>Действия</th>
         </tr>
+
         <tr th:each="order: ${orders}">
             <td th:text="${order.id}">number</td>
             <td th:text="${order.status}">status</td>
@@ -33,24 +40,24 @@
                 &nbsp;
                 <span th:text="${order.client.lastname}">lastname</span>
             </td>
-
             <td th:text="${order.amount}">sum order</td>
             <td>
                 <form sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" class="m-2 d-inline"
-                      th:action="@{/orders/{orderId}/show(orderId=${order.id})}"
+                      th:action="@{/orders/{id}/show(id=${order.id})}"
                       th:method="get">
                     <button class="btn btn-info">Посмотреть</button>
                 </form>
 
-                <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'new')}">
+                <th:block sec:authorize="hasRole('ROLE_ADMIN')"
+                          th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'new')}">
                     <div class="me-auto col-auto">
                         <form class="m-2 d-inline"
-                              th:action="@{/orders/{orderId}/{newStatus}(orderId=${order.id}, newStatus='accepted')}"
+                              th:action="@{/admin/orders/{id}/{newStatus}(id=${order.id}, newStatus='accepted')}"
                               th:method="get">
                             <button class="btn btn-success">Принять</button>
                         </form>
                         <form class="m-2 d-inline"
-                              th:action="@{/orders/{orderId}/{newStatus}(orderId=${order.id}, newStatus='rejected')}"
+                              th:action="@{/admin/orders/{id}/{newStatus}(id=${order.id}, newStatus='rejected')}"
                               th:method="get">
 
                             <button class="btn btn-danger">Отклонить</button>
@@ -58,10 +65,11 @@
                     </div>
                 </th:block>
 
-                <th:block th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'accepted')}">
+                <th:block sec:authorize="hasRole('ROLE_ADMIN')"
+                          th:if="${!#strings.isEmpty(status) && #strings.equals(status, 'accepted')}">
                     <div class="me-auto col-auto">
                         <form class="m-2 d-inline"
-                              th:action="@{/orders/{orderId}/{newStatus}(orderId=${order.id}, newStatus='finished')}"
+                              th:action="@{/admin/orders/{id}/{newStatus}(id=${order.id}, newStatus='finished')}"
                               th:method="get">
                             <button class="btn btn-secondary">Завершить</button>
                         </form>

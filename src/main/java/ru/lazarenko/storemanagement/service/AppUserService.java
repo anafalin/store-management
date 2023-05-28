@@ -89,6 +89,7 @@ public class AppUserService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Integer getClientIdByLogin(String login) {
         return appUserRepository.findClientIdByLogin(login);
     }
