@@ -5,8 +5,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.lazarenko.storemanagement.dto.CreateUserRequest;
+import ru.lazarenko.storemanagement.dto.UpdateUserRequest;
 import ru.lazarenko.storemanagement.entity.Cart;
 import ru.lazarenko.storemanagement.entity.Client;
 import ru.lazarenko.storemanagement.entity.Order;
@@ -15,7 +17,9 @@ import ru.lazarenko.storemanagement.service.CartService;
 import ru.lazarenko.storemanagement.service.ClientService;
 import ru.lazarenko.storemanagement.service.OrderService;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
@@ -79,10 +83,39 @@ public class ClientController {
 
     @GetMapping("/clients/{clientId}/profile")
     public String getProfilePage(Model model, @PathVariable Integer clientId) {
+        UpdateUserRequest request = new UpdateUserRequest();
         Client client = clientService.getClientFullInfoById(clientId);
-        model.addAttribute("client", client);
-        model.addAttribute("request", new CreateUserRequest());
+        request.setFirstname(client.getFirstname());
+        request.setLastname(client.getLastname());
+        request.setEmail(client.getUser().getEmail());
+        request.setPassword(client.getUser().getPassword());
+        request.setPasswordConfirm(client.getUser().getPassword());
+        model.addAttribute("request", request);
         return "/client/profile";
+    }
+
+    @PostMapping("/clients/{clientId}/update-profile")
+    public String updateUser(@ModelAttribute("request") @Valid UpdateUserRequest request, BindingResult errors,
+                             Model model, @PathVariable Integer clientId){
+        System.out.println(request);
+        if (errors.hasErrors()) {
+            return "/client/profile";
+        }
+
+        if (request.getPassword() != null && !request.getPassword().isEmpty() && !request.getPassword().equals(request.getPasswordConfirm())) {
+            model.addAttribute("passwordConfirm", "Введенные пароли не совпадают");
+            return "/client/profile";
+        }
+
+        if(request.getPassword() != null && !request.getPassword().isEmpty()) {
+            model.addAttribute("messageAboutConfirmEmail",
+                    "Пожалуйста, подтвердите свой email по ссылке из отправленного Вам сообщения");
+        }
+
+        clientService.updateUser(request, clientId);
+        model.addAttribute("messageAboutUpdate", "Новые данные сохранены");
+        return "/client/profile";
+
     }
 
     @ModelAttribute

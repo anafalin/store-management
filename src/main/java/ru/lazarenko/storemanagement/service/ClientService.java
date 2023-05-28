@@ -1,8 +1,11 @@
 package ru.lazarenko.storemanagement.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.lazarenko.storemanagement.dto.CreateUserRequest;
+import ru.lazarenko.storemanagement.dto.UpdateUserRequest;
 import ru.lazarenko.storemanagement.entity.Cart;
 import ru.lazarenko.storemanagement.entity.CartRow;
 import ru.lazarenko.storemanagement.entity.Client;
@@ -18,6 +21,7 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final CartService cartService;
     private final ProductService productService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<Client> getAllClients() {
@@ -43,7 +47,7 @@ public class ClientService {
 
     @Transactional
     public Client getClientWithOrdersByClientId(Integer id) {
-        return clientRepository.getClientWithOrdersByClientId(id)
+        return clientRepository.findClientWithOrdersByClientId(id)
                 .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(id)));
     }
 
@@ -51,5 +55,21 @@ public class ClientService {
     public Client getClientFullInfoById(Integer id) {
         return clientRepository.findWithUserById(id)
                 .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(id)));
+    }
+
+    @Transactional
+    public void updateUser(UpdateUserRequest request, Integer clientId) {
+        Client client = clientRepository.findAllWithUserById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(clientId)));
+
+        client.setLastname(request.getLastname());
+        client.setFirstname(request.getFirstname());
+
+        client.getUser().setEmail(request.getEmail());
+        if(!request.getPassword().isEmpty()) {
+            client.getUser().setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        clientRepository.save(client);
     }
 }
