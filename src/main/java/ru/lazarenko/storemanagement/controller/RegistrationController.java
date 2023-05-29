@@ -43,7 +43,9 @@ public class RegistrationController {
 
         appUserService.createUser(request);
 
-        model.addAttribute("messageAboutConfirmEmail", "Пожалуйста, подтвердите свой email по ссылке из отправленного Вам сообщения");
+        model.addAttribute("messageAboutConfirmEmail",
+                "Пожалуйста, подтвердите свой email по ссылке из отправленного Вам сообщения");
+
         return "/enter/login";
     }
 
@@ -58,6 +60,7 @@ public class RegistrationController {
             model.addAttribute("messageType", "danger");
             model.addAttribute("message", "Некорректный код активации!");
         }
+
         return "/enter/login";
     }
 }

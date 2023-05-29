@@ -25,6 +25,7 @@ public class OrdersController {
         Order order = orderService.getOrderWithRowsById(id);
         model.addAttribute("order", order);
         model.addAttribute("orderRows", order.getOrderRows());
+
         return "/order/order";
     }
 

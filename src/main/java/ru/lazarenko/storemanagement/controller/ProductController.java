@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.lazarenko.storemanagement.entity.Product;
 import ru.lazarenko.storemanagement.service.AppUserService;
 import ru.lazarenko.storemanagement.service.ProductService;
@@ -27,6 +26,7 @@ public class ProductController {
     public String getAllProducts(Model model) {
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
+
         return "/product/products";
     }
 

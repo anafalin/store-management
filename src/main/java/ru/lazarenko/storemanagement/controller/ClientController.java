@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.lazarenko.storemanagement.dto.CreateUserRequest;
 import ru.lazarenko.storemanagement.dto.UpdateUserRequest;
 import ru.lazarenko.storemanagement.entity.Cart;
 import ru.lazarenko.storemanagement.entity.Client;
@@ -19,7 +18,6 @@ import ru.lazarenko.storemanagement.service.OrderService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
@@ -96,7 +94,7 @@ public class ClientController {
 
     @PostMapping("/clients/{clientId}/update-profile")
     public String updateUser(@ModelAttribute("request") @Valid UpdateUserRequest request, BindingResult errors,
-                             Model model, @PathVariable Integer clientId){
+                             Model model, @PathVariable Integer clientId) {
         System.out.println(request);
         if (errors.hasErrors()) {
             return "/client/profile";
@@ -107,7 +105,7 @@ public class ClientController {
             return "/client/profile";
         }
 
-        if(request.getPassword() != null && !request.getPassword().isEmpty()) {
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             model.addAttribute("messageAboutConfirmEmail",
                     "Пожалуйста, подтвердите свой email по ссылке из отправленного Вам сообщения");
         }

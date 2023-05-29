@@ -6,31 +6,32 @@
     <title>Заказ</title>
 </head>
 <body>
-
 <th:block th:insert="~{part/navigation :: nav}"/>
 
-<div class="container mt-3">
-    <h4>Список всех заказов</h4>
+<div class="container">
 
-    <table class="table">
-        <tr>
-            <th>Наименование</th>
-            <th>Цена</th>
-            <th>Количество</th>
-            <th>Сумма</th>
-        </tr>
-        <tr th:each="orderRow : ${orderRows}">
-            <td th:text="${orderRow.product.name}">Name</td>
-            <td th:text="${orderRow.product.price}">Price</td>
-            <td th:text="${orderRow.count}">Count</td>
-            <td th:text="${orderRow.amount}">Amount</td>
-        </tr>
-    </table>
+    <div class="container-lg mx-auto my-2">
+        <h4>Заказ №<span th:text="${order.id}"></span></h4>
 
-    <div>Общая сумма заказа: <span th:text="${order.amount}">amount cart</span></div>
+        <table class="table">
+            <tr>
+                <th>Наименование</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+            </tr>
+            <tr th:each="orderRow : ${orderRows}">
+                <td th:text="${orderRow.product.name}">Name</td>
+                <td th:text="${orderRow.product.price}">Price</td>
+                <td th:text="${orderRow.count}">Count</td>
+                <td th:text="${orderRow.amount}">Amount</td>
+            </tr>
+        </table>
 
+        <div>Общая сумма заказа: <span th:text="${order.amount}">amount cart</span></div>
+    </div>
+
+    <th:block th:insert="~{part/footer :: footer}"/>
 </div>
-
-<th:block th:insert="~{part/footer :: footer}"/>
 </body>
 </html>

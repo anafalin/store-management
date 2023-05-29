@@ -6,36 +6,46 @@
     <title>Programmer: Вход</title>
 </head>
 <body>
-
 <th:block th:insert="~{part/navigation :: nav}"/>
 
-<div class="container mt-5">
+<div class="container">
 
-    <div th:if="${!#strings.isEmpty(messageError)}" class="alert alert-danger" role="alert" th:text="${messageError}"></div>
+    <div class="container mt-5">
 
-    <div th:if="${!#strings.isEmpty(messageAboutConfirmEmail)}" class="alert alert-info" role="alert" th:text="${messageAboutConfirmEmail}"></div>
+        <div class="alert alert-danger" role="alert"
+             th:if="${!#strings.isEmpty(messageError)}"
+             th:text="${messageError}"></div>
 
-    <div th:if="${!#strings.isEmpty(messageType)}" th:class="${#strings.prepend(messageType, 'my-3 alert alert-')}" role="alert" th:text="${message}"></div>
+        <div class="alert alert-info" role="alert"
+             th:if="${!#strings.isEmpty(messageAboutConfirmEmail)}"
+             th:text="${messageAboutConfirmEmail}"></div>
 
-    <div class="container col-4">
-        <h3>Авторизация</h3>
-        <form class="form-signin" method="post" action="/login">
-            <p>
-                <label for="username" class="sr-only">Логин</label>
-                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
-            </p>
-            <p>
-                <label for="password" class="sr-only">Пароль</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-            </p>
+        <div th:if="${!#strings.isEmpty(messageType)}"
+             th:class="${#strings.prepend(messageType, 'my-3 alert alert-')}"
+             role="alert" th:text="${message}"></div>
 
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="container col-4">
+            <h3>Авторизация</h3>
+            <form class="form-signin" method="post" action="/login">
+                <p>
+                    <label for="username" class="sr-only">Логин</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username"
+                           required autofocus>
+                </p>
+                <p>
+                    <label for="password" class="sr-only">Пароль</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                           required>
+                </p>
 
-            <button class="btn btn-primary btn-block" type="submit">Войти</button>
-        </form>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <button class="btn btn-primary btn-block" type="submit">Войти</button>
+            </form>
+        </div>
     </div>
+    <th:block th:insert="~{part/footer :: footer}"/>
 </div>
 
-<th:block th:insert="~{part/footer :: footer}"/>
 </body>
 </html>

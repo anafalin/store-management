@@ -28,26 +28,26 @@ public class AdminController {
     private final OrderService orderService;
     private final ProductService productService;
 
-    // clients
     @GetMapping("/clients")
-    public String getPageAllClients(Model model){
+    public String getPageAllClients(Model model) {
         List<Client> clients = clientService.getAllClients();
         model.addAttribute("clients", clients);
+
         return "/client/clients";
     }
 
     @GetMapping("/clients/{clientId}/orders")
-    public String getPageAllClientOrder(Model model, @PathVariable Integer clientId){
+    public String getPageAllClientOrder(Model model, @PathVariable Integer clientId) {
         List<Order> orders = orderService.getAllOrdersByClientId(clientId);
         model.addAttribute("orders", orders);
         model.addAttribute("clientId", clientId);
+
         return "/order/orders";
     }
 
-    // orders
     @GetMapping("/orders")
     public String getPageNewOrders(Model model, @RequestParam(name = "status", required = false) String status) {
-        if(status == null || status.isEmpty()) {
+        if (status == null || status.isEmpty()) {
             List<Order> allOrders = orderService.getAllOrders();
             model.addAttribute("orders", allOrders);
             return "/order/orders";
@@ -56,19 +56,21 @@ public class AdminController {
         List<Order> orders = orderService.getOrdersByStatus(status);
         model.addAttribute("orders", orders);
         model.addAttribute("status", status);
+
         return "/order/orders";
     }
 
     @GetMapping("/orders/{id}/{newStatus}")
-    public String acceptOrder(@PathVariable Integer id, @PathVariable(name = "newStatus") String status) {
+    public String acceptOrder(@PathVariable Integer id, @PathVariable(name = "newStatus") String status, Model model) {
         orderService.updateStatusById(status, id);
-        return "redirect:/orders/all";
+
+        return "redirect:/admin/orders";
     }
 
-    // products
     @GetMapping("/products/new")
     public String getPageForCreateProduct(Model model) {
         model.addAttribute("product", new Product());
+
         return "/product/create-form";
     }
 

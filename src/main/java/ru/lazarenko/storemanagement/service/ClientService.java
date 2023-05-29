@@ -33,6 +33,18 @@ public class ClientService {
         Cart cart = cartService.getCartByClientId(clientId);
         Product product = productService.getProductById(productId);
 
+        for (CartRow cartRow : cart.getCartRows()) {
+            if(cartRow.getProduct().equals(product)) {
+                cartRow.setCount(cartRow.getCount() + count);
+                cartRow.setAmount(new BigDecimal(cartRow.getCount()).multiply(product.getPrice()));
+                cartService.save(cart);
+
+                updateAmountCart(cart);
+
+                return;
+            }
+        }
+
         BigDecimal amountRow = new BigDecimal(count).multiply(product.getPrice());
         CartRow cartRow = CartRow.builder()
                 .product(product)
@@ -71,5 +83,13 @@ public class ClientService {
         }
 
         clientRepository.save(client);
+    }
+
+    private void updateAmountCart(Cart cart) {
+        BigDecimal amount = new BigDecimal(0);
+        for (CartRow cartRow : cart.getCartRows()) {
+            amount = amount.add(new BigDecimal(cartRow.getCount()).multiply(cartRow.getProduct().getPrice()));
+        }
+        cart.setAmount(amount);
     }
 }

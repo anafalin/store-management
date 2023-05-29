@@ -29,18 +29,22 @@ public class MainController {
         String login = authentication.getName();
         Integer clientId = appUserService.getClientIdByLogin(login);
         model.addAttribute("clientId", clientId);
+
         return "index";
     }
 
     @GetMapping("/login/error")
     public String getPageErrorLogin(Model model) {
-        model.addAttribute("messageError", "Пользователь не найден или неверно введены данные для входа");
+        model.addAttribute("messageError",
+                "Пользователь не найден или неверно введены данные для входа");
+
         return "/enter/login";
     }
 
     @GetMapping("/logout")
     public String logout() {
         SecurityContextHolder.getContext().setAuthentication(null);
+
         return "redirect:/";
     }
 }
