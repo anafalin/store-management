@@ -66,7 +66,7 @@ public class ClientController {
 
     @GetMapping("/clients/{clientId}/orders")
     public String getClientOrder(@PathVariable Integer clientId, Model model) {
-        List<Order> orders = orderService.getOrdersByClientId(clientId);
+        List<Order> orders = orderService.getAllOrdersByClientId(clientId);
         model.addAttribute("orders", orders);
         return "/order/orders";
     }
@@ -82,7 +82,7 @@ public class ClientController {
     @GetMapping("/clients/{clientId}/profile")
     public String getProfilePage(Model model, @PathVariable Integer clientId) {
         UpdateUserRequest request = new UpdateUserRequest();
-        Client client = clientService.getClientFullInfoById(clientId);
+        Client client = clientService.getClientWithUserById(clientId);
         request.setFirstname(client.getFirstname());
         request.setLastname(client.getLastname());
         request.setEmail(client.getUser().getEmail());

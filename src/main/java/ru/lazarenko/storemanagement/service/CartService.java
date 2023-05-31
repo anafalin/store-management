@@ -9,6 +9,7 @@ import ru.lazarenko.storemanagement.repository.CartRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class CartService {
     public Cart getCartByClientId(Integer clientId) {
         return cartRepository
                 .findCartWithCartRowsByClientId(clientId)
-                .orElseThrow(() -> new RuntimeException("Cart by client id='%d' not found".formatted(clientId)));
+                .orElseThrow(() -> new NoSuchElementException("Cart by client id='%d' not found".formatted(clientId)));
     }
 
     @Transactional
@@ -32,7 +33,7 @@ public class CartService {
     public void changeCountRowById(Integer clientId, Integer cartRowId, Integer newCount) {
         Cart cart = cartRepository
                 .findCartWithCartRowsByClientId(clientId)
-                .orElseThrow(() -> new RuntimeException("Cart by client id='%d' not found".formatted(clientId)));
+                .orElseThrow(() -> new NoSuchElementException("Cart by client id='%d' not found".formatted(clientId)));
 
         List<CartRow> cartRows = cart.getCartRows();
 
@@ -52,7 +53,7 @@ public class CartService {
     public void deleteRowById(Integer clientId, Integer cartRowId) {
         Cart cart = cartRepository
                 .findCartWithCartRowsByClientId(clientId)
-                .orElseThrow(() -> new RuntimeException("Cart by client id='%d' not found".formatted(clientId)));
+                .orElseThrow(() -> new NoSuchElementException("Cart by client id='%d' not found".formatted(clientId)));
 
         List<CartRow> cartRows = cart.getCartRows();
 

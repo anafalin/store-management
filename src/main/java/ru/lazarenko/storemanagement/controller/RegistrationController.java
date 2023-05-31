@@ -49,7 +49,7 @@ public class RegistrationController {
         return "/enter/login";
     }
 
-    @GetMapping("/activate/{code}")
+    @GetMapping("/user/activate/{code}")
     public String activate(Model model, @PathVariable String code) {
         boolean isActivated = appUserService.activeUser(code);
 

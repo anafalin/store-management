@@ -22,6 +22,5 @@ public class SmtpMailSender {
         mailMessage.setText(message);
 
         mailSender.send(mailMessage);
-
     }
 }

@@ -7,6 +7,7 @@ import ru.lazarenko.storemanagement.entity.Product;
 import ru.lazarenko.storemanagement.repository.ProductRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,6 @@ public class ProductService {
     public Product getProductById(Integer productId) {
         return productRepository
                 .findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product by id='%d' not found".formatted(productId)));
+                .orElseThrow(() -> new NoSuchElementException("Product by id='%d' not found".formatted(productId)));
     }
 }

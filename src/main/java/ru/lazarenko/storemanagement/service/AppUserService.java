@@ -73,6 +73,11 @@ public class AppUserService {
         return true;
     }
 
+    @Transactional(readOnly = true)
+    public Integer getClientIdByLogin(String login) {
+        return appUserRepository.findClientIdByLogin(login);
+    }
+
     private void sendMessage(AppUser appUser) {
         if (StringUtils.hasLength(appUser.getEmail())) {
             String message = String.format(
@@ -87,10 +92,5 @@ public class AppUserService {
 
             smtpMailSender.send(appUser.getEmail(), "Activation code", message);
         }
-    }
-
-    @Transactional(readOnly = true)
-    public Integer getClientIdByLogin(String login) {
-        return appUserRepository.findClientIdByLogin(login);
     }
 }

@@ -15,8 +15,8 @@ import java.util.List;
 @SpringBootApplication
 @RequiredArgsConstructor
 public class StoreApplication implements CommandLineRunner {
-    private final AppUserRepository appUserRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final AppUserRepository appUserRepository;
+//    private final PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(StoreApplication.class, args);

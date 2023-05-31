@@ -12,14 +12,12 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    List<Order> getByStatus(OrderStatus status);
+    List<Order> findByStatus(OrderStatus status);
 
     @Query(value = "select o from Order o left join fetch o.orderRows where o.id=:clientId")
-    Optional<Order> findWithRowsById(Integer clientId);
+    Optional<Order> findWithRowsByClientId(Integer clientId);
 
     @Query(value = "select o from Order o left join fetch o.client where o.client.id=:clientId")
-    List<Order> findOrdersByClientId(Integer clientId);
+    List<Order> findAllByClientId(Integer clientId);
 
-    @Query(value = "select o from Order o left join fetch o.client where o.client.id=:clientId")
-    List<Order> getAllOrdersByClientId(Integer clientId);
 }

@@ -18,8 +18,6 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
     Optional<Client> findWithUserById(Integer id);
 
     @Query(value = "select c from Client c left join fetch c.user")
-    List<Client> findAllWithUserInfo();
+    List<Client> findAllWithUser();
 
-    @Query(value = "select c from Client c left join fetch c.user where c.id=:id")
-    Optional<Client> findAllWithUserById(Integer id);
 }

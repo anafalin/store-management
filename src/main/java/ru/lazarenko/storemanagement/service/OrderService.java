@@ -11,6 +11,7 @@ import ru.lazarenko.storemanagement.util.StatusUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Service
@@ -20,7 +21,6 @@ public class OrderService {
     private final CartService cartService;
     private final ClientService clientService;
     private final CartRowService cartRowService;
-    private final ProductService productService;
 
     @Transactional
     public void createOrderByClientId(Integer clientId) {
@@ -45,7 +45,7 @@ public class OrderService {
         client.addOrder(order);
         cart.setAmount(new BigDecimal(0));
         cart.setCartRows(new ArrayList<>());
-        cartService.save(cart);
+        orderRepository.save(order);
     }
 
     @Transactional(readOnly = true)
@@ -54,13 +54,14 @@ public class OrderService {
         if (Objects.isNull(orderStatus)) {
             return List.of();
         }
-        return orderRepository.getByStatus(orderStatus);
+        return orderRepository.findByStatus(orderStatus);
     }
 
     @Transactional
     public void updateStatusById(String status, Integer orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order by id='%d' not found".formatted(orderId)));
+                .orElseThrow(() -> new NoSuchElementException("Order by id='%d' not found".formatted(orderId)));
+
         OrderStatus newOrderStatus = StatusUtils.getOrderStatus(status);
         if (!Objects.isNull(newOrderStatus)) {
             order.setStatus(newOrderStatus);
@@ -70,8 +71,8 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public Order getOrderWithRowsById(Integer orderId) {
-        return orderRepository.findWithRowsById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order by id='%d' not found".formatted(orderId)));
+        return orderRepository.findWithRowsByClientId(orderId)
+                .orElseThrow(() -> new NoSuchElementException("Order by id='%d' not found".formatted(orderId)));
     }
 
     @Transactional(readOnly = true)
@@ -80,12 +81,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Order> getOrdersByClientId(Integer clientId) {
-        return orderRepository.findOrdersByClientId(clientId);
-    }
-
-    @Transactional(readOnly = true)
     public List<Order> getAllOrdersByClientId(Integer id) {
-        return orderRepository.getAllOrdersByClientId(id);
+        return orderRepository.findAllByClientId(id);
     }
 }

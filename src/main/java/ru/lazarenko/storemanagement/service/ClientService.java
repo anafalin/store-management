@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.lazarenko.storemanagement.dto.CreateUserRequest;
 import ru.lazarenko.storemanagement.dto.UpdateUserRequest;
 import ru.lazarenko.storemanagement.entity.Cart;
 import ru.lazarenko.storemanagement.entity.CartRow;
@@ -14,6 +13,7 @@ import ru.lazarenko.storemanagement.repository.ClientRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class ClientService {
 
     @Transactional(readOnly = true)
     public List<Client> getAllClients() {
-        return clientRepository.findAllWithUserInfo();
+        return clientRepository.findAllWithUser();
     }
 
     @Transactional
@@ -40,7 +40,6 @@ public class ClientService {
                 cartService.save(cart);
 
                 updateAmountCart(cart);
-
                 return;
             }
         }
@@ -60,19 +59,19 @@ public class ClientService {
     @Transactional
     public Client getClientWithOrdersByClientId(Integer id) {
         return clientRepository.findClientWithOrdersByClientId(id)
-                .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(id)));
+                .orElseThrow(() -> new NoSuchElementException("Client with id = '%d' not found".formatted(id)));
     }
 
     @Transactional(readOnly = true)
-    public Client getClientFullInfoById(Integer id) {
+    public Client getClientWithUserById(Integer id) {
         return clientRepository.findWithUserById(id)
-                .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(id)));
+                .orElseThrow(() -> new NoSuchElementException("Client with id = '%d' not found".formatted(id)));
     }
 
     @Transactional
     public void updateUser(UpdateUserRequest request, Integer clientId) {
-        Client client = clientRepository.findAllWithUserById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client with id = '%d' not found".formatted(clientId)));
+        Client client = clientRepository.findWithUserById(clientId)
+                .orElseThrow(() -> new NoSuchElementException("Client with id = '%d' not found".formatted(clientId)));
 
         client.setLastname(request.getLastname());
         client.setFirstname(request.getFirstname());
