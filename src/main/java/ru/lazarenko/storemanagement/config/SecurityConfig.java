@@ -30,7 +30,7 @@ public class SecurityConfig {
                     .and()
                 .authorizeRequests()
                     .antMatchers("/img/**", "/css/**").permitAll()
-                    .antMatchers("/", "/login/*", "/reg", "/logout", "/activate/*").permitAll()
+                    .antMatchers("/", "/login/*", "/reg", "/logout", "/user/activate/*").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()

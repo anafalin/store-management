@@ -38,8 +38,11 @@
             </div>
 
 
-            <a sec:authorize="isAuthenticated()" sec:authentication="name" class="profile mx-4"
+            <a sec:authorize="isAuthenticated() && !hasRole('ROLE_ADMIN')" sec:authentication="name" class="profile mx-4"
                th:href="@{/clients/{id}/profile(id=${clientId})}">
+            </a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" sec:authentication="name" class="profile mx-4"
+               href="#">
             </a>
             <a sec:authorize="!isAuthenticated()" class="profile mx-4" href="">Гость</a>
 

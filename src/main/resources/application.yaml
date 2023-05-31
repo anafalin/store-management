@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -14,7 +14,7 @@ spring:
   mail:
     host: smtp.yandex.ru
     username: bot.api.afalin@yandex.ru
-    password: stpkioqwaypgvfee
+    password: password
     port: 465
     protocol: smtps
 

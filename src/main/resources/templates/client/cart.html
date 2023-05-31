@@ -10,7 +10,7 @@
 <body>
 <th:block th:insert="~{part/navigation :: nav}"/>
 
-<div class="container">
+<div class="container my-4">
 
     <div class="container-lg mx-auto my-2">
         <h4>Корзина</h4>
@@ -21,7 +21,7 @@
                 <th>Цена</th>
                 <th>Количество</th>
                 <th>Сумма</th>
-                <th  sec:authorize="!hasRole('ROLE_ADMIN')">Действия</th>
+                <th sec:authorize="!hasRole('ROLE_ADMIN')">Действия</th>
             </tr>
             <tr th:each="cartRow : ${cartRows}">
                 <td th:text="${cartRow.product.name}">Name</td>
@@ -37,7 +37,7 @@
                         </button>
                     </form>
                     <form class="d-flex align-items-center justify-content-center"
-                          sec:authorize="!hasAnyRole('ROLE_ADMIN')"
+                          sec:authorize="!hasRole('ROLE_ADMIN')"
                           th:action="@{/clients/{id}/orders/change-row/{cartRowId}(id=${clientId},cartRowId=${cartRow.id})}"
                           th:method="get">
                         <label>

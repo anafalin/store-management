@@ -8,13 +8,13 @@
 <body>
 <th:block th:insert="~{part/navigation :: nav}"/>
 
-<div class="container">
+<div class="container my-4">
 
     <div class="container-lg mx-auto my-2">
         <h4>Создание нового товара</h4>
 
         <form th:method="post"
-              th:action="@{/products/new/add} "
+              th:action="@{/admin/products/new/add} "
               enctype="multipart/form-data">
 
             <div th:object="${product}">

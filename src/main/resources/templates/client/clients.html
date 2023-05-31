@@ -10,7 +10,7 @@
 
 <th:block th:insert="~{part/navigation :: nav}"/>
 
-<div class="container">
+<div class="container my-4">
 
     <div class="container-lg mx-auto my-2">
 
@@ -30,7 +30,7 @@
                 <td th:text="${client.firstname}">FirstName</td>
                 <td th:text="${client.lastname}">LastName</td>
                 <td th:text="${client.user.email}">email</td>
-                <td class="d-inline-flex p-2">
+                <td>
                     <!-- Показать корзину -->
                     <form class="m-2 d-inline"
                           th:action="@{/clients/{id}/cart(id=${client.id})}"
