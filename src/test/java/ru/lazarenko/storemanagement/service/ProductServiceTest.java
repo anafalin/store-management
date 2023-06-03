@@ -5,6 +5,11 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import ru.lazarenko.storemanagement.entity.Client;
 import ru.lazarenko.storemanagement.entity.Product;
 import ru.lazarenko.storemanagement.repository.ProductRepository;
 
@@ -36,12 +41,15 @@ class ProductServiceTest {
 
     @Test
     void getAllProducts_emptyList_productNotExist() {
-        when(productRepository.findAll())
-                .thenReturn(List.of());
+        Pageable paging = PageRequest.of(0, 10);
+        Page<Product> productPage = new PageImpl<>(List.of(), paging, 0);
 
-        List<Product> result = underTest.getAllProducts();
+        when(productRepository.findAll(paging))
+                .thenReturn(productPage);
 
-        verify(productRepository, Mockito.only()).findAll();
+        List<Product> result = underTest.getAllProducts(paging).getContent();
+
+        verify(productRepository, Mockito.only()).findAll(paging);
 
         assertTrue(result.isEmpty());
     }
@@ -58,12 +66,15 @@ class ProductServiceTest {
                 .name("Phone")
                 .build();
 
-        when(productRepository.findAll())
-                .thenReturn(List.of(product1, product2));
+        Pageable paging = PageRequest.of(0, 10);
+        Page<Product> productPage = new PageImpl<>(List.of(product1, product2), paging, 0);
 
-        List<Product> result = underTest.getAllProducts();
+        when(productRepository.findAll(paging))
+                .thenReturn(productPage);
 
-        verify(productRepository, Mockito.only()).findAll();
+        List<Product> result = underTest.getAllProducts(paging).getContent();
+
+        verify(productRepository, Mockito.only()).findAll(paging);
 
         assertAll(
                 () -> assertFalse(result.isEmpty()),

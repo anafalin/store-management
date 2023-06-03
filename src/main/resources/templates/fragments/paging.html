@@ -1,0 +1,11 @@
+<a th:fragment="paging(href, pageNum, label, tooltip)" class="page-link"
+   th:href="@{${href} + '?' + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
+   th:title="${tooltip}" rel="tooltip">
+    [[${label}]]
+</a>
+
+<a th:fragment="ordersPaging(href, pageNum, label, tooltip)" class="page-link"
+   th:href="@{${href} + '&' + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
+   th:title="${tooltip}" rel="tooltip">
+    [[${label}]]
+</a>

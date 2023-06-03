@@ -4,12 +4,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.lazarenko.storemanagement.dto.UpdateUserRequest;
 import ru.lazarenko.storemanagement.entity.AppUser;
 import ru.lazarenko.storemanagement.entity.Client;
 import ru.lazarenko.storemanagement.entity.Order;
+import ru.lazarenko.storemanagement.model.OrderStatus;
 import ru.lazarenko.storemanagement.repository.ClientRepository;
+import ru.lazarenko.storemanagement.util.StatusUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,9 +46,13 @@ class ClientServiceTest {
 
     @Test
     void getAllClients_emptyList_clientsNotExist() {
-        when(clientRepository.findAllWithUser()).thenReturn(List.of());
+        Pageable paging = PageRequest.of(0, 10);
 
-        List<Client> result = underTest.getAllClients();
+        Page<Client> clientPage = new PageImpl<>(List.of(), paging, 0);
+
+        when(clientRepository.findAllWithUser(paging)).thenReturn(clientPage);
+
+        List<Client> result = underTest.getAllClients(paging).getContent();
         assertTrue(result.isEmpty());
     }
 
@@ -60,9 +70,15 @@ class ClientServiceTest {
                 .user(appUser)
                 .build();
 
-        when(clientRepository.findAllWithUser()).thenReturn(List.of(client));
+        List<Client> clients = List.of(client);
 
-        List<Client> result = underTest.getAllClients();
+        Pageable paging = PageRequest.of(0, 10);
+
+        Page<Client> clientPage = new PageImpl<>(clients, paging, clients.size());
+
+        when(clientRepository.findAllWithUser(paging)).thenReturn(clientPage);
+
+        List<Client> result = underTest.getAllClients(paging).getContent();
         assertFalse(result.isEmpty());
     }
 

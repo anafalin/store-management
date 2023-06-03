@@ -1,6 +1,8 @@
 package ru.lazarenko.storemanagement.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lazarenko.storemanagement.entity.*;
@@ -49,12 +51,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Order> getOrdersByStatus(String status) {
+    public Page<Order> getOrdersByStatus(String status, Pageable pageable) {
         OrderStatus orderStatus = StatusUtils.getOrderStatus(status);
         if (Objects.isNull(orderStatus)) {
-            return List.of();
+            return Page.empty();
         }
-        return orderRepository.findByStatus(orderStatus);
+        return orderRepository.findByStatus(orderStatus, pageable);
     }
 
     @Transactional
@@ -76,8 +78,8 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Page<Order> getAllOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

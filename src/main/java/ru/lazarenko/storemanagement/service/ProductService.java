@@ -1,12 +1,13 @@
 package ru.lazarenko.storemanagement.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lazarenko.storemanagement.entity.Product;
 import ru.lazarenko.storemanagement.repository.ProductRepository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -20,8 +21,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(Pageable paging) {
+        return productRepository.findAll(paging);
     }
 
     @Transactional(readOnly = true)
@@ -29,5 +30,13 @@ public class ProductService {
         return productRepository
                 .findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("Product by id='%d' not found".formatted(productId)));
+    }
+
+    @Transactional
+    public void addCountProductById(Integer productId, int count) {
+        Product product = getProductById(productId);
+        product.setCount(product.getCount() + count);
+
+        productRepository.save(product);
     }
 }

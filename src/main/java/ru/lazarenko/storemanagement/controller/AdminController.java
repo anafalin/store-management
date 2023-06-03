@@ -1,6 +1,9 @@
 package ru.lazarenko.storemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,10 +32,20 @@ public class AdminController {
     private final ProductService productService;
 
     @GetMapping("/clients")
-    public String getPageAllClients(Model model) {
-        List<Client> clients = clientService.getAllClients();
-        model.addAttribute("clients", clients);
+    public String getPageAllClients(@RequestParam(defaultValue = "1") int page,
+                                    @RequestParam(defaultValue = "10") int size, Model model) {
+        List<Client> clients;
+        Pageable paging = PageRequest.of(page - 1, size);
 
+        Page<Client> pageClients = clientService.getAllClients(paging);
+
+        clients = pageClients.getContent();
+
+        model.addAttribute("clients", clients);
+        model.addAttribute("currentPage", pageClients.getNumber() + 1);
+        model.addAttribute("totalItems", pageClients.getTotalElements());
+        model.addAttribute("totalPages", pageClients.getTotalPages());
+        model.addAttribute("pageSize", size);
         return "/client/clients";
     }
 
@@ -46,15 +59,33 @@ public class AdminController {
     }
 
     @GetMapping("/orders")
-    public String getPageNewOrders(Model model, @RequestParam(name = "status", required = false) String status) {
+    public String getPageNewOrders(@RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "10") int size,
+                                   @RequestParam(name = "status", required = false) String status,
+                                   Model model) {
+        List<Order> orders;
+        Pageable paging = PageRequest.of(page - 1, size);
+
         if (status == null || status.isEmpty()) {
-            List<Order> allOrders = orderService.getAllOrders();
-            model.addAttribute("orders", allOrders);
+            Page<Order> pageOrders = orderService.getAllOrders(paging);
+            orders = pageOrders.getContent();
+
+            model.addAttribute("orders", orders);
+            model.addAttribute("currentPage", pageOrders.getNumber() + 1);
+            model.addAttribute("totalItems", pageOrders.getTotalElements());
+            model.addAttribute("totalPages", pageOrders.getTotalPages());
+            model.addAttribute("pageSize", size);
+
             return "/order/orders";
         }
+        Page<Order> pageOrders = orderService.getOrdersByStatus(status, paging);
+        orders = pageOrders.getContent();
 
-        List<Order> orders = orderService.getOrdersByStatus(status);
         model.addAttribute("orders", orders);
+        model.addAttribute("currentPage", pageOrders.getNumber() + 1);
+        model.addAttribute("totalItems", pageOrders.getTotalElements());
+        model.addAttribute("totalPages", pageOrders.getTotalPages());
+        model.addAttribute("pageSize", size);
         model.addAttribute("status", status);
 
         return "/order/orders";
@@ -89,5 +120,11 @@ public class AdminController {
         model.addAttribute("product", new Product());
 
         return "/product/create-form";
+    }
+
+    @PostMapping("/products/{productId}/change-count")
+    public String addProduct(@PathVariable Integer productId, @RequestParam Integer count) {
+        productService.addCountProductById(productId, count);
+        return "redirect:/products/all";
     }
 }

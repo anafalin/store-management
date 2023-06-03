@@ -2,6 +2,7 @@ package ru.lazarenko.storemanagement.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.lazarenko.storemanagement.entity.Product;
+import ru.lazarenko.storemanagement.repository.ProductRepository;
 import ru.lazarenko.storemanagement.service.AppUserService;
 import ru.lazarenko.storemanagement.service.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,12 +29,23 @@ import java.util.List;
 public class ProductController {
     private final AppUserService appUserService;
     private final ProductService productService;
+    private final ProductRepository productRepository;
 
     @GetMapping("/all")
-    public String getAllProducts(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                 @RequestParam(defaultValue = "0") int page, Model model) {
-        List<Product> products = productService.getAllProducts();
+    public String getAllProducts(@RequestParam(defaultValue = "1") int page,
+                                 @RequestParam(defaultValue = "4") int size, Model model) {
+        List<Product> products;
+        Pageable paging = PageRequest.of(page - 1, size);
+
+        Page<Product> pageProducts = productService.getAllProducts(paging);
+
+        products = pageProducts.getContent();
+
         model.addAttribute("products", products);
+        model.addAttribute("currentPage", pageProducts.getNumber() + 1);
+        model.addAttribute("totalItems", pageProducts.getTotalElements());
+        model.addAttribute("totalPages", pageProducts.getTotalPages());
+        model.addAttribute("pageSize", size);
 
         return "/product/products";
     }

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 import ru.lazarenko.storemanagement.entity.Order;
 import ru.lazarenko.storemanagement.model.OrderStatus;
@@ -31,13 +33,17 @@ class OrderRepositoryTest {
 
     @Test
     void getByStatus_emptyList_finishedOrdersNotExist() {
-        List<Order> result = underTest.findByStatus(OrderStatus.FINISHED);
+        Pageable paging = PageRequest.of(0, 10);
+
+        List<Order> result = underTest.findByStatus(OrderStatus.FINISHED, paging).getContent();
         assertTrue(result.isEmpty());
     }
 
     @Test
     void getByStatus_notEmptyList_newOrdersExist() {
-        List<Order> result = underTest.findByStatus(OrderStatus.NEW);
+        Pageable paging = PageRequest.of(0, 10);
+
+        List<Order> result = underTest.findByStatus(OrderStatus.NEW, paging).getContent();
         assertFalse(result.isEmpty());
         assertEquals(10000, result.get(0).getAmount().intValue());
         assertEquals(OrderStatus.NEW, result.get(0).getStatus());

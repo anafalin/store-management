@@ -1,5 +1,6 @@
 package ru.lazarenko.storemanagement.service;
 
+import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -7,6 +8,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ru.lazarenko.storemanagement.entity.Cart;
 import ru.lazarenko.storemanagement.entity.Client;
 import ru.lazarenko.storemanagement.entity.Order;
@@ -15,6 +20,7 @@ import ru.lazarenko.storemanagement.repository.OrderRepository;
 import ru.lazarenko.storemanagement.util.StatusUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -72,19 +78,25 @@ class OrderServiceTest {
 
     @Test
     void getOrdersByStatus_emptyList_statusIsNull() {
+        Pageable paging = PageRequest.of(0, 10);
+
         mockStatic.when(() -> StatusUtils.getOrderStatus(anyString())).thenReturn(null);
 
-        assertTrue(underTest.getOrdersByStatus("incorrect").isEmpty());
+        assertTrue(underTest.getOrdersByStatus("incorrect", paging).isEmpty());
     }
 
     @Test
     void getOrdersByStatus_notEmptyList_statusIsNotNull() {
+        Pageable paging = PageRequest.of(0, 10);
+        List<Order> orders = List.of(new Order());
+
+        Page<Order> orderPage = new PageImpl<>(orders, paging, orders.size());
         mockStatic.when(() -> StatusUtils.getOrderStatus(anyString())).thenReturn(OrderStatus.NEW);
 
-        when(orderRepository.findByStatus(any(OrderStatus.class)))
-                .thenReturn(List.of(new Order()));
+        when(orderRepository.findByStatus(any(OrderStatus.class), any()))
+                .thenReturn(orderPage);
 
-        List<Order> result = underTest.getOrdersByStatus("NEW");
+        List<Order> result = underTest.getOrdersByStatus("NEW", paging).getContent();
 
         assertFalse(result.isEmpty());
     }
@@ -136,10 +148,12 @@ class OrderServiceTest {
 
     @Test
     void getAllOrders_emptyList_ordersNotExist() {
-        when(orderRepository.findAll())
-                .thenReturn(List.of());
+        Pageable paging = PageRequest.of(0, 10);
+        Page<Order> orderPage = new PageImpl<>(List.of(), paging, 0);
 
-        List<Order> result = underTest.getAllOrders();
+        when(orderRepository.findAll(paging)).thenReturn(orderPage);
+
+        List<Order> result = underTest.getAllOrders(paging).getContent();
 
         assertTrue(result.isEmpty());
     }
@@ -148,10 +162,15 @@ class OrderServiceTest {
     void getAllOrders_notEmptyList_orderExist() {
         Order order = Order.builder().id(1).amount(new BigDecimal(15000)).status(OrderStatus.NEW).build();
 
-        when(orderRepository.findAll())
-                .thenReturn(List.of(order));
+        Pageable paging = PageRequest.of(0, 10);
+        List<Order> orders = List.of(order);
 
-        List<Order> result = underTest.getAllOrders();
+        Page<Order> orderPage = new PageImpl<>(orders, paging, orders.size());
+
+        when(orderRepository.findAll(paging))
+                .thenReturn(orderPage);
+
+        List<Order> result = underTest.getAllOrders(paging).getContent();
 
         assertFalse(result.isEmpty());
         assertEquals(order.getAmount(), result.get(0).getAmount());
