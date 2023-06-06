@@ -45,35 +45,34 @@ __Администратору:__
 ✅ Увеличение количества созданных товаров.
 
 ### Страница регистрации
-<img src="images/registration.png" alt="Start page" title="Start page">
+<img src="images/registration.png" alt="Registration page" title="Registration page">
 
 ### Страница авторизации
-<img src="images/sign-in.png" alt="Start page" title="Start page">
+<img src="images/sign-in.png" alt="Sign in page" title="Sign in page">
 
 ### После регистрации на почту пользователя приходит сообщение о необходимости подтвердить указанную при регистрации почту
-<img src="images/message.png" alt="Start page" title="Start page">
+<img src="images/message.png" alt="Email message page" title="Email message  page">
 
 ### Начальная страница админа
-<img src="images/admin-panel.png" alt="Start page" title="Start page">
+<img src="images/admin-panel.png" alt="Admin panel page" title="Admin panel page">
 
 ### Страница пользователей (для админа)
-<img src="images/admin-users.png" alt="Start page" title="Start page">
+<img src="images/admin-users.png" alt="Admin users page" title="Admin users page">
 
 ### Страница заказов (для админа)
-<img src="images/admin-orders.png" alt="Start page" title="Start page">
+<img src="images/admin-orders.png" alt="Admin orders page" title="Admin orders page">
 
 ### Страница просмотра заказа
-<img src="images/order-info.png" alt="Start page" title="Start page">
+<img src="images/order-info.png" alt="Order info page" title="Order info page">
 
 ### Страница корзины пользователя
-<img src="images/user-cart.png" alt="Start page" title="Start page">
+<img src="images/user-cart.png" alt="Users cart page" title="Users cart page">
 
 ### Страница просмотра доступных товаров
-<img src="images/products.png" alt="Start page" title="Start page">
+<img src="images/products.png" alt="Products page" title="Products page">
 
 ### Страница для добавления новых товаров (для админа)
-<img src="images/add-product.png" alt="Start page" title="Start page">
-
+<img src="images/add-product.png" alt="Add product page" title="Add product page">
 
 ### Пример кода
 Контроллер по обработке запросов на /products и метод, обрабатывающий end-point /products/all
@@ -128,3 +127,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findAll(Pageable pageable);
 }
 ```
+
+### Схема базы данных 
+<img src="images/diagram.png" alt="Schema database" title="schema">
