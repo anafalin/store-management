@@ -100,7 +100,9 @@ public class ClientController {
             return "/client/profile";
         }
 
-        if (request.getPassword() != null && !request.getPassword().isEmpty() && !request.getPassword().equals(request.getPasswordConfirm())) {
+        if (request.getPassword() != null
+                && !request.getPassword().isEmpty()
+                && !request.getPassword().equals(request.getPasswordConfirm())) {
             model.addAttribute("passwordConfirm", "Введенные пароли не совпадают");
             return "/client/profile";
         }

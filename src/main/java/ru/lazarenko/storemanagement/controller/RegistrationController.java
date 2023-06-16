@@ -25,7 +25,8 @@ public class RegistrationController {
     }
 
     @PostMapping("/reg")
-    public String createNewClient(@ModelAttribute("request") @Valid CreateUserRequest request, BindingResult errors, Model model) {
+    public String createNewClient(@ModelAttribute("request") @Valid CreateUserRequest request,
+                                  BindingResult errors, Model model) {
 
         if (errors.hasErrors()) {
             return "/enter/registration";
