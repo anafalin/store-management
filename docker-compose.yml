@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  store-management-service:
+    build: ../store-management
+    image: store_management_service_image
+    container_name: store_management_service
+    depends_on:
+      - store-management-database
+    ports:
+      - "8080:8080"
+    environment:
+      - db_url=jdbc:mysql://store_management_db:3307/store
+      - username=root
+      - pwd=adminpass
+      - PROFILE=docker
+      - upload_path=store-management-data
+      - app.initial.setup=true
+
+  store-management-database:
+    image: mysql
+    container_name: store_management_db
+    volumes:
+      - store-management-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: adminpass
+      MYSQL_DATABASE: store
+
+volumes:
+  store-management-data:

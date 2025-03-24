@@ -20,7 +20,7 @@ public class CreateUserRequest {
 
     @NotEmpty(message = "Введите пароль")
     @Pattern(regexp = "[A-Za-z0-9._]{5,15}",
-            message = "Пароль должен содержать от 5 до 15 символов и состоять из заглавных, строчных букв и цифр")
+            message = "Пароль должен содержать от 5 до 15 символов и только заглавные, строчные буквы или цифры")
     private String password;
 
     @NotEmpty(message = "Введите подтверждение пароля")

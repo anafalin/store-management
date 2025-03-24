@@ -1,9 +1,15 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:store
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+  profiles:
+    active: ${PROFILE:local}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        id:
+          new_generator_mappings: true
 
   liquibase:
     enabled: true
@@ -16,14 +22,18 @@ spring:
     port: 465
     protocol: smtps
 
-
 upload:
   path: /C:/Documents/upload
 
 mail:
   debug: true
 
+app:
+  initial:
+    setup: false
+
 logging:
   level:
     org:
       thymeleaf: DEBUG
+

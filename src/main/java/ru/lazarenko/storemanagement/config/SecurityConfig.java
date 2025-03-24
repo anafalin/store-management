@@ -29,7 +29,7 @@ public class SecurityConfig {
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/img/**", "/css/**").permitAll()
+                    .antMatchers("/img/**", "/css/**", "/templates/**").permitAll()
                     .antMatchers("/", "/login/*", "/reg", "/logout", "/user/activate/*").permitAll()
                     .anyRequest().authenticated()
                     .and()

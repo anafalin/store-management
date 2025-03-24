@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: ${db_url}
+    username: ${username}
+    password: ${pwd}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+upload:
+  path: ${upload_path}/upload
+
+  app:
+    initial:
+      setup: ${app.initial.setup}
